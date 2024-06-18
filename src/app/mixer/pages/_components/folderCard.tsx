@@ -94,7 +94,7 @@ export default function MixerFolderCard(
     }, [Ctx.reloadFolder, Ctx.folderActive]);
     return (
         <div className=" my-1">
-            <div className={`${isActiveFolder ? "bg-yellow-100 dark:bg-red-950" : "bg-slate-100 dark:bg-slate-800"} bg-gray-50 p-2 rounded`}>
+            <div className={`${isActiveFolder ? "bg-red-100 dark:bg-red-950" : "bg-slate-100 dark:bg-slate-800"} bg-gray-50 p-2 rounded`}>
                 <div className=" flex items-center">
                     <div className="tooltip tooltip-right cursor-pointer" data-tip="Open or close a folder">
                         {!showSubFolders && <div onClick={() => { openFolder(); }}>
