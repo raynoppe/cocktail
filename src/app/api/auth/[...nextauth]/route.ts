@@ -23,17 +23,18 @@ export const authOptions: NextAuthOptions = {
                         email,
                     },
                 });
-                // if user doesn't exist or password doesn't match
                 if (!user || !(await compare(password, user.password))) {
                     throw new Error("Invalid username or password");
                 }
-                return user;
+                return {
+                    ...user,
+                    user_type: user.user_type || "",
+                };
             },
         }),
     ],
     callbacks: {
         async jwt({ token, user }) {
-            console.log("jwt called");
             if (user) {
                 token.id = user.id;
                 token.user_type = user.user_type as string;
@@ -41,7 +42,6 @@ export const authOptions: NextAuthOptions = {
             return token;
         },
         async session({ session, token }) {
-            console.log("Session callback called");
             if (session.user) {
                 session.user.id = token.id;
                 session.user.user_type = token.user_type;

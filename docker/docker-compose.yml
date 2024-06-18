@@ -1,17 +1,15 @@
-# Use postgres/example user/password credentials
 version: '3.9'
-
 services:
-
   db:
     image: postgres
     restart: always
     shm_size: 128mb
     ports:
       - 5432:5432
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
       POSTGRES_PASSWORD: yourpasshere
-
   adminer:
     image: adminer
     restart: always

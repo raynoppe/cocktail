@@ -6,6 +6,8 @@ import LoadingDots from "@/components/shared/loading-dots";
 import toast from "react-hot-toast";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input"
+
 
 export default function Form({ type }: { type: "login" | "register" }) {
     const [loading, setLoading] = useState(false);
@@ -64,7 +66,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
                 >
                     Email Address
                 </label>
-                <input
+                <Input
                     id="email"
                     name="email"
                     type="email"
@@ -81,7 +83,7 @@ export default function Form({ type }: { type: "login" | "register" }) {
                 >
                     Password
                 </label>
-                <input
+                <Input
                     id="password"
                     name="password"
                     type="password"

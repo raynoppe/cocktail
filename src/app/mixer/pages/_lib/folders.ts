@@ -6,7 +6,7 @@ import { Folders } from '@/types/pagesFolder';
 
 const prisma = new PrismaClient();
 
-export const mxrFolderAdd = async (name: string, parent: string, order: number) => {
+export const mxrFolderAdd = async (name: string, parent: string, order: number): Promise<Folders> => {
     const folder = await prisma.folders.create({
         data: {
             id: uuidv4(),
@@ -18,7 +18,7 @@ export const mxrFolderAdd = async (name: string, parent: string, order: number) 
     return folder;
 }
 
-export const mxrFolderGet = async (id: string) => {
+export const mxrFolderGet = async (id: string): Promise<Folders | null> => {
     const folder = await prisma.folders.findUnique({
         where: {
             id: id
@@ -55,7 +55,7 @@ export const mxrFolderGetChildren = async (id: string): Promise<Folders[]> => {
     return folders;
 }
 
-export const mxrFolderDelete = async (id: string) => {
+export const mxrFolderDelete = async (id: string): Promise<{ deletedFolders: any, deletedPages: any }> => {
     const deletedFolders = await prisma.folders.deleteMany({
         where: {
             OR: [
@@ -72,7 +72,7 @@ export const mxrFolderDelete = async (id: string) => {
     return { deletedFolders, deletedPages };
 }
 
-export const mxrFolderDeleteSingle = async (id: string) => {
+export const mxrFolderDeleteSingle = async (id: string): Promise<Folders> => {
     const folder = await prisma.folders.delete({
         where: {
             id: id
@@ -81,7 +81,7 @@ export const mxrFolderDeleteSingle = async (id: string) => {
     return folder;
 }
 
-export const mxrFolderUpdate = async (id: string, name: string, order: number) => {
+export const mxrFolderUpdate = async (id: string, name: string, order: number): Promise<Folders> => {
     console.log("mxrFolderUpdate", id, name, order)
     const folder = await prisma.folders.update({
         where: {
