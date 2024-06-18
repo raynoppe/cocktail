@@ -13,6 +13,15 @@ export interface User {
     Page: Page[];
 }
 
+export interface SessionData {
+    user: {
+        name: string;
+        email: string;
+        image: string;
+        user_type: string;
+        id: string;
+    };
+}
 export interface Account {
     id: string;
     userId: string;

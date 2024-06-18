@@ -1,42 +1,20 @@
+import AuthStatus from "@/components/shared/auth-status";
+import { ModeToggle } from "@/components/shared/themeToggle";
+import Link from "next/link";
+
 export default function MixerNavBar() {
     return (
-        <div className="navbar bg-base-100 shadow-md">
-            <div className="navbar-start">
-                <div className="dropdown">
-                    <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" /></svg>
-                    </div>
-                    <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                        <li><a>Item 1</a></li>
-                        <li>
-                            <a>Parent</a>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a>Item 3</a></li>
-                    </ul>
-                </div>
-                <a className="btn btn-ghost text-xl">Cocktail: Mixer</a>
+        <div className=" flex p-2 border-b items-center space-x-4">
+            <div className=" text-3xl font-mono px-5">Cocktail</div>
+            <div className=" flex-grow space-x-3">
+                <Link href="/mixer/pages">Pages</Link>
+                <Link href="/mixer/users">Users</Link>
             </div>
-            <div className="navbar-center hidden lg:flex">
-                <ul className="menu menu-horizontal px-1">
-                    <li><a>Pages</a></li>
-                    {/* <li>
-                        <details>
-                            <summary>Parent</summary>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </details>
-                    </li> */}
-                    <li><a>Users</a></li>
-                </ul>
+            <div>
+                <AuthStatus />
             </div>
-            <div className="navbar-end">
-                <a className="btn">Button</a>
+            <div>
+                <ModeToggle />
             </div>
         </div>
     )

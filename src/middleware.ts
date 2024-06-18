@@ -7,17 +7,17 @@ export default withAuth(
         console.log("request", request.nextUrl.pathname)
 
         if (request.nextUrl.pathname.startsWith("/mixer")
-            && request.nextauth.token?.role !== "admin"
-            && request.nextauth.token?.role !== "editor"
+            && request.nextauth.token?.user_type !== "admin"
+            && request.nextauth.token?.user_type !== "editor"
         ) {
             return NextResponse.rewrite(
                 new URL("/denied", request.url)
             )
         }
         if (request.nextUrl.pathname.startsWith("/account")
-            && request.nextauth.token?.role !== "admin"
-            && request.nextauth.token?.role !== "editor"
-            && request.nextauth.token?.role !== "user"
+            && request.nextauth.token?.user_type !== "admin"
+            && request.nextauth.token?.user_type !== "editor"
+            && request.nextauth.token?.user_type !== "user"
         ) {
             return NextResponse.rewrite(
                 new URL("/denied", request.url)
