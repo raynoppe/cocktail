@@ -2,19 +2,18 @@ export interface Page {
     id: string;
     title: string;
     slug: string;
-    content: string;
-    published: boolean;
-    publishedAt?: Date;
+    content?: string;
+    folderId?: string | null;
     authorId: string;
-    author: User;
-    status: string;
-    createdAt: Date;
-    updatedAt: Date;
-    PageContent: PageContent[];
+    author?: User;
+    status?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+    PageContent?: PageContent[];
 }
 
 export interface PageContent {
-    id: string;
+    id?: string;
     pageId: string;
     parentId?: string;
     content: string;

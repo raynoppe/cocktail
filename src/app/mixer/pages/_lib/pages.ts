@@ -1,7 +1,8 @@
 "use server"
-import { PrismaClient, Prisma } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import { v4 as uuidv4 } from "uuid";
-import { Folders } from '@/types/pagesFolder';
+import { Folders, Page } from '@/types/pagesFolder';
+import { allowedAdminAccess } from '@/lib/auth';
 
 const prisma = new PrismaClient();
 
@@ -9,34 +10,45 @@ export const mxrPageAdd = async (
     title: string,
     slug: string,
     folderId: string,
-) => {
-    const folder = await prisma.page.create({
+    authorId: string
+): Promise<Page> => {
+    if (!allowedAdminAccess()) {
+        throw new Error('Access Denied');
+    }
+    const page = await prisma.page.create({
         data: {
-            id: uuidv4(),
-            title: title,
-            slug: slug,
-            folderId: folderId,
+            title,
+            slug,
+            content: '',
+            folderId,
+            authorId,
+            status: 'draft',
         },
     })
-    return folder;
+    return page;
 }
 
-export const mxrPageGet = async (id: string) => {
-    const folder = await prisma.page.findUnique({
+export const mxrPageGet = async (id: string): Promise<Page | null> => {
+    if (!allowedAdminAccess()) {
+        throw new Error('Access Denied');
+    }
+    const page = await prisma.page.findUnique({
         where: {
             id: id
         }
     })
-    return folder;
+    return page;
 }
 
-export const mxrPageGetAll = async (): Promise<Folders[]> => {
+export const mxrPageGetAll = async (): Promise<Page[]> => {
+    if (!allowedAdminAccess()) {
+        throw new Error('Access Denied');
+    }
     const folders = await prisma.page.findMany({
         where: {
             OR: [
-                { parentId: null },
-                { parentId: '' },
-                { parentId: { contains: ' ' } },
+                { folderId: '' },
+                { folderId: { contains: ' ' } },
             ],
         },
         orderBy: {
@@ -46,36 +58,29 @@ export const mxrPageGetAll = async (): Promise<Folders[]> => {
     return folders;
 };
 
-export const mxrPageGetChildren = async (id: string): Promise<Folders[]> => {
-    const folders = await prisma.page.findMany({
+export const mxrPageGetByFolderId = async (folderId: string): Promise<Page[]> => {
+    if (!allowedAdminAccess()) {
+        throw new Error('Access Denied');
+    }
+    if (!folderId || folderId === '') {
+        throw new Error('Folder ID is required');
+    }
+    const pages = await prisma.page.findMany({
         where: {
-            parentId: id
+            folderId
         },
         orderBy: {
             title: 'asc'
         }
-    })
-    return folders;
-}
-
-export const mxrPageDelete = async (id: string) => {
-    const deletedFolders = await prisma.page.deleteMany({
-        where: {
-            OR: [
-                { id: id },
-                { parentId: id },
-            ],
-        },
     });
-    const deletedPages = await prisma.page.deleteMany({
-        where: {
-            folderId: id,
-        },
-    });
-    return { deletedFolders, deletedPages };
-}
+    return pages;
+};
 
-export const mxrPageDeleteSingle = async (id: string) => {
+
+export const mxrPageDeleteSingle = async (id: string): Promise<Page> => {
+    if (!allowedAdminAccess()) {
+        throw new Error('Access Denied');
+    }
     const folder = await prisma.page.delete({
         where: {
             id: id
@@ -84,16 +89,22 @@ export const mxrPageDeleteSingle = async (id: string) => {
     return folder;
 }
 
-export const mxrPageUpdate = async (id: string, title: string, order: number) => {
-    console.log("mxrPageUpdate", id, title, order)
-    const folder = await prisma.page.update({
+export const mxrPageUpdate = async (
+    id: string,
+    title: string,
+    slug: string
+) => {
+    if (!allowedAdminAccess()) {
+        throw new Error('Access Denied');
+    }
+    const page = await prisma.page.update({
         where: {
             id: id
         },
         data: {
-            title: title,
-            order: order
+            title,
+            slug
         }
     })
-    return folder;
+    return page;
 }
