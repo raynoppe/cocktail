@@ -2,11 +2,13 @@
 
 import Kmodal from "@/components/shared/modal/modalContainer"
 import { useEffect, useState } from "react"
-import toast from 'react-hot-toast';
 import { mxrFolderAdd, mxrFolderGetAll } from "../_lib/folders";
 import { Folders } from "@/types/pagesFolder";
 import MixerFolderCard from "./folderCard";
-import { FolderPlusIcon } from "@heroicons/react/24/outline";
+import { FolderPlus } from "lucide-react"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast"
 
 export default function MixerPagesFolders() {
     const [showModalAddFolder, setShowModalAddFolder] = useState(false)
@@ -14,6 +16,7 @@ export default function MixerPagesFolders() {
     const [folderParent, setFolderParent] = useState("")
     const [folderOrder, setFolderOrder] = useState(0)
     const [folders, setFolders] = useState<Folders[]>([]);
+    const { toast } = useToast()
 
     const getFolders = async () => {
         const folders: Folders[] = await mxrFolderGetAll();
@@ -25,12 +28,18 @@ export default function MixerPagesFolders() {
         setFolderParent(parent);
         setFolderOrder(order);
         setShowModalAddFolder(true);
+        toast({
+            description: "Folder added",
+        })
     }
 
     const addFolderDo = async () => {
         console.log("addFolderDo")
         if (folderName === "") {
-            toast.error("Name is required");
+            toast({
+                variant: "destructive",
+                description: "Name is required",
+            })
             return;
         }
         const newFolder = await mxrFolderAdd(folderName, folderParent, folderOrder);
@@ -43,40 +52,46 @@ export default function MixerPagesFolders() {
     }, []);
     return (
         <>
-            <div className="flex flex-col w-full h-full space-y-1">
-                <div className=" flex py-1 px-3">
+            <div className="flex flex-col w-full h-full space-y-1 border border-solid border-slate-200 dark:border-slate-500 rounded-lg">
+                <div className=" flex py-2 px-3 bg-slate-100 dark:bg-slate-900 rounded-t-lg items-center">
                     <div className=" flex-grow ">Folders</div>
                     <div>
-                        <button className=" btn btn-primary btn-sm" onClick={() => { addFolder("", 0) }}>
-                            <FolderPlusIcon className="h-5 w-5" />
-                        </button>
+                        <Button variant={'outline'} size={'sm'} onClick={() => { addFolder("", 0) }}>
+                            <FolderPlus className="h-5 w-5 mr-2" /> Add
+                        </Button>
                     </div>
                 </div>
-                {folders.map((r: Folders, i: number) => {
-                    return (
-                        <>
-                            <MixerFolderCard key={r.id} folder={r} parent="" />
-                        </>
-                    )
-                })}
+                {folders.length === 0 && <div className=" p-5">
+                    No folders found
+                </div>}
+                <div className=" h-full flex-grow rounded-b-lg p-2">
+                    {folders.map((r: Folders, i: number) => {
+                        return (
+                            <>
+                                <MixerFolderCard key={r.id} folder={r} parent="" />
+                            </>
+                        )
+                    })}
+                </div>
+
             </div>
             {showModalAddFolder && <Kmodal
                 id="modalAddFolder"
                 closeModal={() => { setShowModalAddFolder(false) }}
                 body={<div>
-                    <label className="input input-bordered flex items-center gap-2">
+                    <label className="flex items-center gap-2 dark:text-slate-300">
                         Name
-                        <input type="text" className="grow input" onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setFolderName((e.target as HTMLInputElement).value) }} />
+                        <Input type="text" className="grow" onChange={(e: React.ChangeEvent<HTMLInputElement>) => { setFolderName((e.target as HTMLInputElement).value) }} />
                     </label>
                 </div>}
                 boxClass="w-[400px] h-[200px]"
-                header={<div>Add Folder</div>}
+                header={<div className=" ">Add Folder</div>}
                 footer={
-                    <div className=" flex">
+                    <div className=" flex ">
                         <div className=" flex-grow"></div>
-                        <div>
-                            <button onClick={() => { setShowModalAddFolder(false) }} className=" btn btn-cancel p-2">Cancel</button>
-                            <button onClick={() => { addFolderDo() }} className=" btn btn-primary p-2">Save</button>
+                        <div className=" space-x-3">
+                            <Button variant={'outline'} size={'sm'} onClick={() => { setShowModalAddFolder(false) }} className=" p-2 w-[100px]">Cancel</Button>
+                            <Button variant={'secondary'} size={'sm'} onClick={() => { addFolderDo() }} className=" p-2 w-[100px]">Save</Button>
                         </div>
                     </div>
                 }

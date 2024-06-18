@@ -11,9 +11,13 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useEffect, useState } from "react"
 
 export function ModeToggle() {
-    const { setTheme } = useTheme()
+    const [mounted, setMounted] = useState(false);
+    const { setTheme, resolvedTheme } = useTheme();
+
+    useEffect(() => setMounted(true), []);
 
     return (
         <DropdownMenu>
@@ -35,6 +39,6 @@ export function ModeToggle() {
                     System
                 </DropdownMenuItem>
             </DropdownMenuContent>
-        </DropdownMenu>
+        </DropdownMenu >
     )
 }

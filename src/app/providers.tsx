@@ -1,8 +1,8 @@
 "use client"
 import { ContextProvider } from '@/components/shared/context'
-import { ThemeProvider } from '@/components/shared/themeProvider';
 import React from 'react'
 import { Toaster } from "react-hot-toast";
+import { ThemeProvider } from 'next-themes'
 
 export function Providers({
     children,
@@ -10,18 +10,11 @@ export function Providers({
     children: React.ReactNode;
 }>) {
     return (
-
         <ContextProvider>
-            <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-                disableTransitionOnChange
-            >
-                {children}
-            </ThemeProvider>
+            <ThemeProvider attribute='class' defaultTheme='system' enableSystem>{children}</ThemeProvider>
+
+
             <Toaster position="bottom-left" />
         </ContextProvider>
-
     )
 }

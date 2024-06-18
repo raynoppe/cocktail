@@ -6,11 +6,11 @@ export default function MixerLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <div>
+        <div className=" h-[calc(100%-60px)]">
             <div>
                 <MixerNavBar />
             </div>
-            <div>{children}</div>
+            <div className=" h-full">{children}</div>
         </div>
     );
 }

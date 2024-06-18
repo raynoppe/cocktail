@@ -6,7 +6,6 @@ import { Providers } from "./providers";
 import { ToastContainer, Slide } from "react-toastify";
 import "./globals.css";
 
-
 const inter = Inter({
   subsets: ["latin"],
   variable: '--font-inter',
@@ -34,8 +33,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className=" h-full w-full">
-      <body className={`${inter.variable} ${cormorant.variable} font-sans dark h-full w-full`}>
+    <html lang="en" className=" h-full w-full" suppressHydrationWarning>
+      <body className={`${inter.variable} ${cormorant.variable} font-sans h-full w-full`}>
+
         <CookiesProvider>
           <Providers>
             {children}

@@ -2,8 +2,10 @@ import { Folders } from "@/types/pagesFolder";
 import { mxrFolderAdd, mxrFolderDelete, mxrFolderGetChildren, mxrFolderUpdate } from "../_lib/folders";
 import { use, useContext, useEffect, useState } from "react";
 import { CheckCircleIcon, FolderIcon, FolderMinusIcon, FolderOpenIcon, FolderPlusIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { Folder, FolderOpen, FolderMinus, FolderPlus, FolderPen, FolderCheck, X, Check } from "lucide-react"
 import toast from "react-hot-toast";
 import AppContext from "@/components/shared/context";
+import { Input } from "@/components/ui/input";
 
 export default function MixerFolderCard(
     {
@@ -91,63 +93,63 @@ export default function MixerFolderCard(
         }
     }, [Ctx.reloadFolder, Ctx.folderActive]);
     return (
-        <>
-            <div className={`${isActiveFolder ? "bg-yellow-100" : "bg-gray-50"} bg-gray-50 p-2 rounded`}>
+        <div className=" my-1">
+            <div className={`${isActiveFolder ? "bg-yellow-100 dark:bg-red-950" : "bg-slate-100 dark:bg-slate-800"} bg-gray-50 p-2 rounded`}>
                 <div className=" flex items-center">
                     <div className="tooltip tooltip-right cursor-pointer" data-tip="Open or close a folder">
                         {!showSubFolders && <div onClick={() => { openFolder(); }}>
-                            <FolderIcon className="h-5 w-6" />
+                            <Folder className="h-6 w-6" />
                         </div>}
 
                         {showSubFolders && <div onClick={() => { closeFolder(); }}>
-                            <FolderOpenIcon className="h-5 w-6" />
+                            <FolderOpen className="h-6 w-6" />
                         </div>}
                     </div>
                     <div className=" flex-grow px-3 cursor-pointer" onClick={() => { openFolderPages(); }}>{folderDisplayName}</div>
                     {showDeleteFolder && <div className=" space-x-1">
-                        <button className=" btn btn-sm" onClick={() => { setShowDeleteFolder(false) }}>
-                            <XCircleIcon className="h-5 w-6" />
+                        <button onClick={() => { setShowDeleteFolder(false) }}>
+                            <X className="h-6 w-6" />
                         </button>
                         <button className=" btn btn-sm btn-error" onClick={() => { deleteFolder() }}>
-                            <CheckCircleIcon className="h-5 w-6" />
+                            <Check className="h-6 w-6" />
                         </button>
                     </div>}
                     {!showDeleteFolder && <div className=" space-x-1">
-                        <button className=" btn btn-sm "
+                        <button
                             onClick={() => {
                                 setUpsertType("edit");
                                 setFolderName(folder.name)
                                 setShowAddFolder(true);
                             }}>
-                            <PencilSquareIcon className="h-5 w-6" />
+                            <FolderPen className="h-6 w-6" />
                         </button>
-                        <button className=" btn btn-sm " onClick={() => { setShowDeleteFolder(true) }}>
-                            <FolderMinusIcon className="h-5 w-6" />
+                        <button onClick={() => { setShowDeleteFolder(true) }}>
+                            <FolderMinus className="h-6 w-6" />
                         </button>
-                        <button className=" btn btn-sm " onClick={() => { setUpsertType("add"); setShowAddFolder(true) }}>
-                            <FolderPlusIcon className="h-5 w-6" />
+                        <button onClick={() => { setUpsertType("add"); setShowAddFolder(true) }}>
+                            <FolderPlus className="h-6 w-6" />
                         </button>
                     </div>}
                 </div>
             </div>
-            {showAddFolder && <div className="flex p-2 bg-gray-100 space-x-2">
-                <input type="text" className=" input input-sm input-bordered flex-grow" value={folderName} onChange={(e) => { setFolderName(e.target.value) }} />
-                <button className=" btn btn-sm" onClick={() => { setShowAddFolder(false) }}>
-                    <XCircleIcon className="h-5 w-6" />
+            {showAddFolder && <div className="flex p-2 mx-3 bg-gray-100 dark:bg-slate-800 space-x-2 rounded-b-lg">
+                <Input type="text" className=" input input-sm input-bordered flex-grow" value={folderName} onChange={(e) => { setFolderName(e.target.value) }} />
+                <button onClick={() => { setShowAddFolder(false); setFolderName(""); }}>
+                    <X className="h-6 w-6" />
                 </button>
                 <button className=" btn btn-primary btn-sm" onClick={addFolder}>
-                    <CheckCircleIcon className="h-5 w-6" />
+                    <Check className="h-6 w-6" />
                 </button>
             </div>}
             <div>
                 {showSubFolders && folders.map((r: Folders, i: number) => {
                     return (
-                        <div key={r.id} className=" pl-5 space-y-1">
+                        <div key={r.id} className=" pl-2 space-y-1">
                             <MixerFolderCard folder={r} parent="" />
                         </div>
                     )
                 })}
             </div>
-        </>
+        </div>
     )
 }
