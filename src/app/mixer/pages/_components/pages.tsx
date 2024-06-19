@@ -2,11 +2,12 @@
 import AppContext from "@/components/shared/context";
 import { Page } from "@/types/pagesFolder";
 import { useContext, useEffect, useState } from "react";
+import { Plus } from "lucide-react"
 
 export default function MixerPages() {
     const Ctx = useContext(AppContext);
     const [pages, setPages] = useState<Page[]>([]);
-    const [showModalAddPage, setShowModalAddPage] = useState(false)
+    const [showModalAddPage, setShowModalAddPage] = useState<boolean>(false)
 
     useEffect(() => {
         console.log("Ctx.folderActive", Ctx.folderActive);

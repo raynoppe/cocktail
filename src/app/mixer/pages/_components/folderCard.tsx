@@ -1,7 +1,6 @@
 import { Folders } from "@/types/pagesFolder";
 import { mxrFolderAdd, mxrFolderDelete, mxrFolderGetChildren, mxrFolderUpdate } from "../_lib/folders";
 import { use, useContext, useEffect, useState } from "react";
-import { CheckCircleIcon, FolderIcon, FolderMinusIcon, FolderOpenIcon, FolderPlusIcon, PencilSquareIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import { Folder, FolderOpen, FolderMinus, FolderPlus, FolderPen, FolderCheck, X, Check } from "lucide-react"
 import toast from "react-hot-toast";
 import AppContext from "@/components/shared/context";
@@ -17,21 +16,22 @@ export default function MixerFolderCard(
     }) {
     const Ctx = useContext(AppContext);
 
-    const [folderDisplayName, setFolderDisplayName] = useState(folder.name);
-    const [isActiveFolder, setIsActiveFolder] = useState(false);
+    const [folderDisplayName, setFolderDisplayName] = useState<string>(folder.name);
+    const [isActiveFolder, setIsActiveFolder] = useState<boolean>(false);
 
-    const [showSubFolders, setShowSubFolders] = useState(false)
+    const [showSubFolders, setShowSubFolders] = useState<boolean>(false)
     const [folders, setFolders] = useState<Folders[]>([]);
-    const getFolders = async () => {
+    const getFolders = async (): Promise<void> => {
         const folders: Folders[] = await mxrFolderGetChildren(folder.id);
         setFolders(folders);
     }
 
     // add / edit folder
-    const [folderName, setFolderName] = useState("")
-    const [showAddFolder, setShowAddFolder] = useState(false)
-    const [upsertType, setUpsertType] = useState("add")
-    const addFolder = async () => {
+    const [folderName, setFolderName] = useState<string>("");
+    const [showAddFolder, setShowAddFolder] = useState<boolean>(false);
+    const [upsertType, setUpsertType] = useState<string>("add");
+
+    const addFolder = async (): Promise<void> => {
         if (folderName === "") {
             toast.error("Folder Name is required");
             return;
@@ -55,8 +55,8 @@ export default function MixerFolderCard(
     }
 
     // delete folder
-    const [showDeleteFolder, setShowDeleteFolder] = useState(false)
-    const deleteFolder = async () => {
+    const [showDeleteFolder, setShowDeleteFolder] = useState<boolean>(false)
+    const deleteFolder = async (): Promise<void> => {
         try {
             await mxrFolderDelete(folder.id);
             setShowDeleteFolder(false);
@@ -68,16 +68,16 @@ export default function MixerFolderCard(
     }
 
     // open folder
-    const openFolder = () => {
+    const openFolder = (): void => {
         getFolders();
         setShowSubFolders(true);
     }
 
-    const closeFolder = () => {
+    const closeFolder = (): void => {
         setShowSubFolders(false);
     }
 
-    const openFolderPages = () => {
+    const openFolderPages = (): void => {
         Ctx.setFolderActive(folder.id);
         setIsActiveFolder(true);
         getFolders();
